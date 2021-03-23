@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  
+  <title>Frontend Mentor | Todo app</title>
+  <link rel="stylesheet" href="css/attribution.css"> 
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/checkbox.css">
+</head>
+
+<body>
+  <header>
+    <h1>
+      TODO
+    </h1>
+    <div>
+      <img class="img-light" src="images/icon-moon.svg">
+      <img class="img-dark" src="images/icon-sun.svg">
+      </div>
+  </header>
+
+  <div class="box new-task">
+    <div class="checkbox-container round"><input type="checkbox" id="disabled" disabled><label for="disabled"></label></div>
+    <input type="text" placeholder="Create a new todo..." required>
+    <div class="delete-item"></div>
+  </div>
+  
+
+  <main id="main">
+    
+      <div class="box task" id="box-0">
+        <div class="checkbox-container round">
+          <input type="checkbox" id="checkbox-0" />
+          <label for="checkbox-0"></label>
+        </div>
+        <div class="item-description">Complete online JS Course</div>
+        <div class="delete-item"><img src="images/icon-cross.svg"></div>
+      </div>
+      <div class="box task" id="box-1">
+        <div class="checkbox-container round">
+          <input type="checkbox" id="checkbox-1"/>
+          <label for="checkbox-1"></label>
+        </div>
+        <div class="item-description">Jog around the park 3x</div>
+        <div class="delete-item"><img src="images/icon-cross.svg"></div>
+      </div>
+      <div class="box task" id="box-2">
+        <div class="checkbox-container round">
+          <input type="checkbox" id="checkbox-2"/>
+          <label for="checkbox-2"></label>
+        </div>
+        <div class="item-description">10 min meditation</div>
+        <div class="delete-item"><img src="images/icon-cross.svg"></div>
+      </div>
+      <div class="box task" id="box-3">
+        <div class="checkbox-container round">
+          <input type="checkbox" id="checkbox-3"/>
+          <label for="checkbox-3"></label>
+        </div>
+        <div class="item-description">Read for 1 hour</div>
+        <div class="delete-item"><img src="images/icon-cross.svg"></div>
+      </div>
+      <div class="box task" id="box-4">
+        <div class="checkbox-container round">
+          <input type="checkbox" id="checkbox-4"/>
+          <label for="checkbox-4"></label>
+        </div>
+        <div class="item-description">Pick up groceries</div>
+        <div class="delete-item"><img src="images/icon-cross.svg"></div>
+      </div>
+      <div class="box task" id="box-5">
+        <div class="checkbox-container round">
+          <input type="checkbox" id="checkbox-5"/>
+          <label for="checkbox-5"></label>
+        </div>
+        <div class="item-description">Complete todo app from front end mentor</div>
+        <div class="delete-item"><img src="images/icon-cross.svg"></div>
+      </div>
+    
+
+    <div id="main-footer">
+      <span id="items"><span id="items-number">6</span> items left</span>
+      <span id="select">
+        <span id="all" class="select">All</span>
+        <span id="active" class="select">Active</span>
+        <span id="completed" class="select">Completed</span>
+      </span>
+      <span id="clear">Clear Completed</span>
+    </div>
+
+  </main>
+
+  <div class="comment">
+    Drag and drop to reorder list
+  </div>
+
+  <div class="attribution">
+    <div>
+      Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+      Coded by <a href="http://www.linkedin.com/in/nicolas-couraud">Nicolas Couraud</a>.
+    </div>
+  </div>
+</body>
+
+
+</html>

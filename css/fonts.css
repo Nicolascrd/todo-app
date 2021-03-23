@@ -1,0 +1,51 @@
+@font-face {
+    font-family: boldFont;
+    src: url(../fonts/JosefinSans-Bold.ttf);
+  }
+@font-face {
+    font-family: regularFont;
+    src: url(../fonts/JosefinSans-Medium.ttf);
+  }
+
+header{
+  font-family: boldFont;
+  color: white;
+  letter-spacing: 14px;
+  font-size:120%;
+  margin-top: 50px; /* A changer pour le mobile */
+}
+
+.box{
+  font-size: 18px;
+  font-family: regularFont;
+}
+
+.box.new-task > input[type="text"]{
+  font-size: 18px;
+  font-family: regularFont;
+}
+
+.box.new-task > input[type="text"]::placeholder{
+  font-family:regularFont;
+  font-size: 18px;
+}
+.box.new-task > input[type="text"]::-moz-placeholder{
+  font-family:regularFont;
+  font-size: 18px;
+}
+.box.new-task > input[type="text"]::ms-input-placeholder{
+  font-family: regularFont;
+  font-size: 18px;
+}
+
+#main-footer{
+  font-family:regularFont;
+  font-size: smaller;
+  color:darkgrey;
+}
+
+.comment{
+  font-family:regularFont;
+  font-size: 0.9em;
+  color:#777777;
+}

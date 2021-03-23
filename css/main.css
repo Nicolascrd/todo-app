@@ -1,0 +1,118 @@
+:root{
+    /* Neutral */
+    --bright-blue: hsl(220, 98%, 61%);
+    --check-background: linear-gradient(hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+
+    /* Light Theme */
+    --Very-Light-Gray: hsl(0, 0%, 98%);
+    --Very-Light-Grayish-Blue:hsl(236, 33%, 92%);
+    --Light-Grayish-Blue: hsl(233, 11%, 84%);
+    --Dark-Grayish-Blue: hsl(236, 9%, 61%);
+    --Very-Dark-Grayish-Blue: hsl(235, 19%, 35%);
+
+    /* Dark Theme */
+    --Very-Dark-Blue: hsl(235, 21%, 11%);
+    --Very-Dark-Desaturated-Blue: hsl(235, 24%, 19%);
+    --Light-Grayish-Blue:hsl(234, 39%, 85%);
+    --Light-Grayish-Blue-hover: hsl(236, 33%, 92%); /* Hover */
+    --Dark-Grayish-Blue: hsl(234, 11%, 52%);
+    --Very-Dark-Grayish-Blue: hsl(233, 14%, 35%);
+    --Very-Dark-Grayish-Blue: hsl(237, 14%, 26%);
+
+    /* Background */
+    background-color: transparent;
+    background-image:url('../images/bg-desktop-light.jpg');
+    background-position:top;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+body{
+    max-width: 540px; /*correspond bien à la maquette pour desktop*/
+    margin:auto;
+}
+
+header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items:center;
+}
+
+.box{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    align-items: center;
+    height:60px;
+    border-radius:5px;
+    background: white;
+    border-bottom: 1px solid var(--Light-Grayish-Blue);
+}
+
+.box.new-task > input[type="text"]{
+    height: 100%;
+    margin:0;
+    padding: 0 0 0 4px;
+    border:0;
+    width:78%;
+    max-width:400px;
+}
+
+.box > .item-description{
+    margin:0;
+    padding: 4px 0 0 0 ;
+    border:0;
+    width:78%;
+    max-width:400px;
+}
+
+
+
+input:focus{
+    outline:none;
+}
+
+.delete-item{
+    visibility:hidden;/*s'active sur hover (à écrire en js)*/
+    width: 18px;
+    margin-right: 20px;
+}
+
+.checkbox-container{
+    height:24px;
+    width:24px;
+    margin-left: 20px;
+}
+
+#main{
+    margin-top:20px;
+    box-shadow: 0 15px 35px -15px var(--Light-Grayish-Blue);
+}
+
+#main-footer{
+    height:50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content:space-around;
+}
+.select{
+    margin:0 7px 0 7px;
+}
+.select:hover{
+    color:var(--Very-Dark-Desaturated-Blue);
+    cursor:pointer;
+  }
+#clear:hover{
+    cursor:pointer;
+    color:var(--Very-Dark-Desaturated-Blue);
+}
+
+
+.comment{
+    margin-top:80px;
+    margin-bottom:50px;
+    text-align:center;
+}
+
+
