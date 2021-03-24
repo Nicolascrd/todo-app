@@ -2,7 +2,7 @@
 .attribution a { color: hsl(228, 45%, 44%); }
 
 .attribution{
-    position:absolute;
+    position:sticky;
     left:calc(50% - 165px); /*175px is half the attribution div*/
     bottom:10px;
     text-align: center;

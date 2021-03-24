@@ -26,13 +26,13 @@
 
   <div class="box new-task">
     <div class="checkbox-container round"><input type="checkbox" id="disabled" disabled><label for="disabled"></label></div>
-    <input type="text" placeholder="Create a new todo..." required>
+    <input id="input-box" type="text" placeholder="Create a new todo..." required>
     <div class="delete-item"></div>
   </div>
   
 
   <main id="main">
-    
+      <div class="tasks">
       <div class="box task" id="box-0">
         <div class="checkbox-container round">
           <input type="checkbox" id="checkbox-0" />
@@ -81,7 +81,9 @@
         <div class="item-description">Complete todo app from front end mentor</div>
         <div class="delete-item"><img src="images/icon-cross.svg"></div>
       </div>
+    </div>
     
+
 
     <div id="main-footer">
       <span id="items"><span id="items-number">6</span> items left</span>
@@ -92,8 +94,8 @@
       </span>
       <span id="clear">Clear Completed</span>
     </div>
+</main>
 
-  </main>
 
   <div class="comment">
     Drag and drop to reorder list
@@ -107,5 +109,5 @@
   </div>
 </body>
 
-
+<script src="scripts/script.js"></script>
 </html>

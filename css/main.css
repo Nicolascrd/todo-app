@@ -38,6 +38,14 @@ header{
     align-items:center;
 }
 
+.img-dark{
+    display:none;
+    cursor:pointer;
+}
+.img-light{
+    cursor:pointer;
+}
+
 .box{
     display: flex;
     flex-direction: row;
@@ -84,6 +92,11 @@ input:focus{
     margin-left: 20px;
 }
 
+.task:hover > .delete-item {
+    visibility:visible;
+    cursor: pointer;
+    padding:4px 0 0 0;
+}
 #main{
     margin-top:20px;
     box-shadow: 0 15px 35px -15px var(--Light-Grayish-Blue);
@@ -114,5 +127,3 @@ input:focus{
     margin-bottom:50px;
     text-align:center;
 }
-
-
