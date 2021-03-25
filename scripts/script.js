@@ -27,6 +27,8 @@ var dataController = (function(){
             if (data.length > 0){
                 // si il y a déjà des tâches dans data
                 ID = data[data.length - 1].id + 1; 
+            } else {
+                ID = 0;
             }
 
             // Build new Task item
@@ -37,6 +39,16 @@ var dataController = (function(){
 
             //return the new task to add it to the UI
             return newItem;
+        },
+
+        removeTask(idNumber){
+            var indice;
+            data.forEach(function(element, ind){
+                if (element.id == idNumber){
+                    indice = ind;
+                }
+            });
+            data.splice(indice,1);
         },
 
         getTaskNumber(){
@@ -51,7 +63,9 @@ var UIController = (function() {
     var DOMstrings = {
         inputDescription:"#input-box",
         container:".tasks",
-        taskNumber: "#items-number"
+        taskNumber: "#items-number",
+        deleteCross:".delete-item",
+        deleteCrossClass:"delete-item"
     };
 
     return {
@@ -74,8 +88,15 @@ var UIController = (function() {
         updateNumber(number){
             document.querySelector(DOMstrings.taskNumber).innerHTML = number;
         },
+
         getDOMstrings:function(){
             return DOMstrings;
+        },
+
+        deleteListItem(selectorId){
+            console.log('box-' + toString(selectorId));
+            el = document.getElementById('box-' + selectorId.toString());
+            el.parentNode.removeChild(el);
         }
     }
 })();
@@ -90,7 +111,9 @@ var controller = (function(dataCtrl, UICtrl){
             if(event.key == 'Enter'){
                 CtrlAddItem();
             }
-        })
+        });
+
+        document.querySelector(DOM.container).addEventListener('click', CtrlDeleteItem);
     };
 
     var CtrlAddItem = function(){
@@ -115,9 +138,35 @@ var controller = (function(dataCtrl, UICtrl){
 
         // 4. Mettre à jour le nombre de tâches à effectuer
         UICtrl.updateNumber(dataCtrl.getTaskNumber());
-        console.log("tasknum", dataCtrl.getTaskNumber());
         
-    }
+    };
+
+    var CtrlDeleteItem = function(event){
+        var id, DOM;
+        DOM = UICtrl.getDOMstrings();
+
+        // 1. Vérifier qu'il s'agit d'une suppression de tâche
+        if(event.srcElement.parentNode.classList.value == DOM.deleteCrossClass){
+            console.log(event);
+        } else {
+            return 0;
+        };
+
+        // 2. Récupérer l'id de la tâche
+        // sous la forme box-5 on récupère le 5.
+        id = event.srcElement.parentNode.parentNode.id.split('-')[1];
+        
+        // 3. Supprimer la tâche des data
+        dataCtrl.removeTask(id);
+
+        // 4. Retirer la tâche supprimée de l'UI
+        UICtrl.deleteListItem(id);
+
+        // 5. Mettre à jour le nombre de tâches à effectuer
+        UICtrl.updateNumber(dataCtrl.getTaskNumber());
+
+
+    };
 
     return{
         test: function(){
