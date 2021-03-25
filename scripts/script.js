@@ -4,6 +4,7 @@ var dataController = (function(){
     var Task = function(id, description){
         this.id = id;
         this.description = description;
+        this.completed = false; //quand on ajoute une tâche, elle est à faire
     };
 
     var data = []; 
@@ -11,10 +12,13 @@ var dataController = (function(){
     /* 
     data = [{
         description: "faire la vaiselle",
-        id: 0
+        id: 0,
+        completed: false
+
     },
     {   description = "faire le ménage",
-        id: 1
+        id: 1,
+        completed: true
     }]
     */
 
@@ -41,7 +45,7 @@ var dataController = (function(){
             return newItem;
         },
 
-        removeTask(idNumber){
+        removeTask:function(idNumber){
             var indice;
             data.forEach(function(element, ind){
                 if (element.id == idNumber){
@@ -49,10 +53,28 @@ var dataController = (function(){
                 }
             });
             data.splice(indice,1);
+            return 0;
         },
 
-        getTaskNumber(){
-            return data.length;
+        getTaskNumber: function(){
+            var res = 0;
+            for (var indice in data){
+                if(data[indice].completed == false){
+                    res ++;
+                }
+            }
+            return res;
+        },
+
+        getData: function(){
+            return data;
+        },
+
+        updateData: function(){
+            // Permet de passer le fait que les cases soient cochées dans data
+            for (var indice in data){
+                data[indice].completed = document.getElementById('checkbox-' + data[indice].id).checked;
+            }
         }
     }
 })();
@@ -65,7 +87,8 @@ var UIController = (function() {
         container:".tasks",
         taskNumber: "#items-number",
         deleteCross:".delete-item",
-        deleteCrossClass:"delete-item"
+        deleteCrossClass:"delete-item",
+        box:'box-'//il faut ajouter le numéro
     };
 
     return {
@@ -77,16 +100,31 @@ var UIController = (function() {
             var html, newHtml;
 
             html = '<div class="box task" id="box-%id%"><div class="checkbox-container round"><input type="checkbox" id="checkbox-%id%" /><label for="checkbox-%id%"></label></div><div class="item-description">%description%</div><div class="delete-item"><img src="images/icon-cross.svg"></div></div>';
-
             newHtml = html.replace('%description%', item.description);
-            newHtml = newHtml.replace('%id%', item.id);
+            newHtml = newHtml.replace('%id%', item.id.toString());
+            newHtml = newHtml.replace('%id%', item.id.toString());
+            newHtml = newHtml.replace('%id%', item.id.toString());
+            //on fait 3 fois pour remplacer les 3 occurences de id dans l'html
 
             //insert html into the DOM
             document.querySelector(DOMstrings.container).insertAdjacentHTML('beforeend', newHtml);
         },
 
-        updateNumber(number){
+        updateNumber: function(number){
             document.querySelector(DOMstrings.taskNumber).innerHTML = number;
+        },
+
+        updateCompletedTasks(data){
+            for (var indice in data){
+                if (data[indice].completed){
+                    //il faut barrer la tâche
+                    console.log(DOMstrings.box + data[indice].id.toString());
+                    document.getElementById(DOMstrings.box + data[indice].id.toString()).classList.add('crossed');
+                } else {
+                    document.getElementById(DOMstrings.box + data[indice].id.toString()).classList.remove('crossed');
+                }
+            }
+
         },
 
         getDOMstrings:function(){
@@ -94,10 +132,11 @@ var UIController = (function() {
         },
 
         deleteListItem(selectorId){
-            console.log('box-' + toString(selectorId));
             el = document.getElementById('box-' + selectorId.toString());
             el.parentNode.removeChild(el);
-        }
+        },
+
+
     }
 })();
 
@@ -107,32 +146,34 @@ var controller = (function(dataCtrl, UICtrl){
     var setupEventListeners = function(){
         var DOM = UICtrl.getDOMstrings();
 
+        //Event listener sur la touche entrée
         document.addEventListener('keypress', function(event){
             if(event.key == 'Enter'){
                 CtrlAddItem();
             }
         });
 
+        //Event listener sur le clic dans le container (pour supprimer les tâches)
         document.querySelector(DOM.container).addEventListener('click', CtrlDeleteItem);
+        
+        //Event listener sur le clic dans le container (pour vérifier les tâches cochées)
+        document.querySelector(DOM.container).addEventListener('click', CtrlCompleteItem);
     };
 
     var CtrlAddItem = function(){
         var input, newItem;
 
-        console.log('dans ctrl add item');
 
         // 1. Get the field input data
         input = UICtrl.getInput(); /* Description sous forme string*/
 
-        console.log('input', input);
         if (input == ""){
             return 0; //on stop si on a une chaine de caractère vide;
         };
 
         // 2. Ajouter la nouvelle Task à data et le récupérer
         newItem = dataCtrl.addTask(input);
-        console.log('newitem',newItem);
-
+        
         // 3. Ajouter newItem à l'UI
         UICtrl.addListItem(newItem);
 
@@ -147,7 +188,7 @@ var controller = (function(dataCtrl, UICtrl){
 
         // 1. Vérifier qu'il s'agit d'une suppression de tâche
         if(event.srcElement.parentNode.classList.value == DOM.deleteCrossClass){
-            console.log(event);
+            //console.log(event);
         } else {
             return 0;
         };
@@ -167,6 +208,27 @@ var controller = (function(dataCtrl, UICtrl){
 
 
     };
+
+    var CtrlCompleteItem = function(event){
+        var id, DOM;
+        DOM = UICtrl.getDOMstrings();
+
+        // 1. Vérifier qu'il s'agit d'une tâche cochée ou décochée.
+        if(event.srcElement.type == 'checkbox'){
+            console.log(event.srcElement);
+        } else {
+            return 0;
+        }
+
+        // 2. Mettre à jour les données 
+        dataCtrl.updateData();
+
+        // 3. Mettre à jour l'UI sur les completed tasks
+        UICtrl.updateCompletedTasks(dataCtrl.getData());
+
+        // 4. Mettre à jour le nombre de tâches à effectuer
+        UICtrl.updateNumber(dataCtrl.getTaskNumber());
+    }
 
     return{
         test: function(){

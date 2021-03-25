@@ -128,3 +128,9 @@ input:focus{
     margin-bottom:50px;
     text-align:center;
 }
+
+/* Pour les tâches qui sont barrées*/
+.crossed{
+    color:var(--Light-Grayish-Blue);
+    text-decoration:line-through;
+}
