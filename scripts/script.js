@@ -66,6 +66,16 @@ var dataController = (function(){
             return res;
         },
 
+        getListCheckedIds: function(){
+            var res = [];
+            for (var indice in data){
+                if (data[indice].completed){
+                    res.push(data[indice].id);
+                }
+            }
+            return res;
+        },
+
         getData: function(){
             return data;
         },
@@ -88,8 +98,14 @@ var UIController = (function() {
         taskNumber: "#items-number",
         deleteCross:".delete-item",
         deleteCrossClass:"delete-item",
-        box:'box-'//il faut ajouter le numéro
+        box:'box-',//il faut ajouter le numéro
+        clearcompleted:'#clear',
+        tache: '.task',
+        completed: '.crossed',
+        select:'#select'
     };
+
+    var show = "all"; // 'all', 'active', 'completed' are the 3 values
 
     return {
         getInput: function() {
@@ -118,7 +134,7 @@ var UIController = (function() {
             for (var indice in data){
                 if (data[indice].completed){
                     //il faut barrer la tâche
-                    console.log(DOMstrings.box + data[indice].id.toString());
+                    //console.log(DOMstrings.box + data[indice].id.toString());
                     document.getElementById(DOMstrings.box + data[indice].id.toString()).classList.add('crossed');
                 } else {
                     document.getElementById(DOMstrings.box + data[indice].id.toString()).classList.remove('crossed');
@@ -127,14 +143,35 @@ var UIController = (function() {
 
         },
 
-        getDOMstrings:function(){
-            return DOMstrings;
+        getDOMstrings:() => DOMstrings,
+
+        updateShow: function(event){
+            show = event.srcElement.id;
+        },
+
+        updateDisplayTasks: function(liste){
+            //On reçoit la liste des id des tâches complétées
+            if (show == 'all'){
+                // tout afficher
+                document.querySelectorAll(DOMstrings.tache).forEach(el => el.style.display = 'flex');
+            } else if (show == 'active'){
+                // tout afficher puis ne plus afficher les tâches complétées
+                document.querySelectorAll(DOMstrings.tache).forEach(el => el.style.display = 'flex');
+                document.querySelectorAll(DOMstrings.completed).forEach(el => el.style.display = 'none');
+            } else if (show == 'completed'){
+                // ne plus afficher tout puis afficher les tâches complétées uniquement
+                document.querySelectorAll(DOMstrings.tache).forEach(el => el.style.display = 'none');
+                document.querySelectorAll(DOMstrings.completed).forEach(el => el.style.display = 'flex');
+            }
+
         },
 
         deleteListItem(selectorId){
             el = document.getElementById('box-' + selectorId.toString());
             el.parentNode.removeChild(el);
         },
+
+    
 
 
     }
@@ -158,6 +195,12 @@ var controller = (function(dataCtrl, UICtrl){
         
         //Event listener sur le clic dans le container (pour vérifier les tâches cochées)
         document.querySelector(DOM.container).addEventListener('click', CtrlCompleteItem);
+
+        //Event listener sur le clic sur le bouton "Clear Completed"
+        document.querySelector(DOM.clearcompleted).addEventListener('click', CtrlClearCompleted);
+
+        //Event listener sur le clic sur un bouton select
+        document.querySelector(DOM.select).addEventListener('click', CtrlDisplay);
     };
 
     var CtrlAddItem = function(){
@@ -215,7 +258,7 @@ var controller = (function(dataCtrl, UICtrl){
 
         // 1. Vérifier qu'il s'agit d'une tâche cochée ou décochée.
         if(event.srcElement.type == 'checkbox'){
-            console.log(event.srcElement);
+            //console.log(event.srcElement);
         } else {
             return 0;
         }
@@ -229,6 +272,32 @@ var controller = (function(dataCtrl, UICtrl){
         // 4. Mettre à jour le nombre de tâches à effectuer
         UICtrl.updateNumber(dataCtrl.getTaskNumber());
     }
+
+    var CtrlClearCompleted = function(event){
+        // 1. Récupérer la liste des id des éléments cochés
+        var liste = dataCtrl.getListCheckedIds();
+
+        // 2. Supprimer ces éléments de data
+        liste.forEach(el => dataCtrl.removeTask(el));
+
+        // 3. Supprimer de l'UI tous ces éléments.
+        liste.forEach(el => UICtrl.deleteListItem(el));
+    }
+
+    var CtrlDisplay = function(event){
+        // 1. Modifier la valeur de show dans l'UI
+        UICtrl.updateShow(event);
+
+        // 2. Récupérer les id des éléments des éléments completed
+        liste = dataCtrl.getListCheckedIds();
+
+        // 3. Mettre à jour l'UI avec la nouvelle valeur de show
+        UICtrl.updateDisplayTasks(liste);
+
+        
+
+    }
+
 
     return{
         test: function(){
