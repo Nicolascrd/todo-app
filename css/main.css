@@ -145,7 +145,25 @@ input:focus{
     background: var(--Very-Dark-Grayish-Blue);
     color:var(--Very-Light-Gray);
 }
+.box-dark.new-task{
+    border-bottom:none;
+}
 
 .main-dark{
     box-shadow: 0 15px 35px -15px black;
+}
+
+.box-dark > .round > label {
+    background-color:var(--Very-Dark-Grayish-Blue);
+}
+
+.box-dark > .delete-item > img {
+    filter:invert(); /* Great trick to change color without reloading the svg, read here https://blog.union.io/code/2017/08/10/img-svg-fill/ */
+}
+.main-dark > .tasks > .task{
+    border-bottom: 1px solid var(--Dark-Grayish-Blue);
+}
+
+.blueButton{
+    color: var(--bright-blue);
 }

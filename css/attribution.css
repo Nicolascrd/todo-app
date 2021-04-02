@@ -10,7 +10,7 @@
     background-color: whitesmoke;
 }
 
-box-dark{
-    background-color: var(--Very-Dark-Grayish-Blue);
-    color:var(--Very-Light-Gray);
+.box-dark.attribution > * > a{
+    color:hsl(220, 98%, 61%);
 }
+

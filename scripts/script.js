@@ -114,6 +114,7 @@ var UIController = (function() {
         tache: '.task',
         completed: '.crossed',
         select:'#select',
+        selectClass:'.select',
         nightmode:'#mode',
         light:'.img-light',//la lune s'affiche en mode jour
         dark:'.img-dark',//le soleil s'affiche en mode nuit
@@ -171,6 +172,15 @@ var UIController = (function() {
 
         updateShow: function(event){
             show = event.srcElement.id;
+            if (show == 'select'){
+                return 0;
+            }
+            var listeSelect = document.querySelectorAll(DOMstrings.selectClass);
+            console.log(listeSelect);
+            for (var ind in [0,1,2]){
+                listeSelect[ind].classList.remove('blueButton');
+            }
+            document.getElementById(show).classList.add('blueButton');
         },
 
         updateDisplayTasks: function(liste){
