@@ -57,6 +57,11 @@ header{
     border-bottom: 1px solid var(--Light-Grayish-Blue);
 }
 
+.box-dark{
+    background: var(--Very-Dark-Grayish-Blue);
+    color:var(--Very-Light-Gray);
+}
+
 .box.new-task > input[type="text"]{
     height: 100%;
     margin:0;
@@ -97,12 +102,12 @@ input:focus{
     cursor: pointer;
     padding:4px 0 0 0;
 }
-#main{
+.main{
     margin-top:20px;
     box-shadow: 0 15px 35px -15px var(--Light-Grayish-Blue);
 }
 
-#main-footer{
+.footer{
     background:white;
     height:50px;
     display: flex;
@@ -133,4 +138,14 @@ input:focus{
 .crossed{
     color:var(--Light-Grayish-Blue);
     text-decoration:line-through;
+}
+
+/* Pour le mode nuit*/
+.box-dark{
+    background: var(--Very-Dark-Grayish-Blue);
+    color:var(--Very-Light-Gray);
+}
+
+.main-dark{
+    box-shadow: 0 15px 35px -15px black;
 }

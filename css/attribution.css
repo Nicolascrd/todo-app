@@ -9,3 +9,8 @@
     padding:10px;
     background-color: whitesmoke;
 }
+
+box-dark{
+    background-color: var(--Very-Dark-Grayish-Blue);
+    color:var(--Very-Light-Gray);
+}

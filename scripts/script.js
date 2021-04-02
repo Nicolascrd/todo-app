@@ -8,6 +8,7 @@ var dataController = (function(){
     };
 
     var data = []; 
+    var night = false;
 
     /* 
     data = [{
@@ -85,6 +86,14 @@ var dataController = (function(){
             for (var indice in data){
                 data[indice].completed = document.getElementById('checkbox-' + data[indice].id).checked;
             }
+        },
+
+        updateMode: function(boolean){
+            night = boolean;
+        },
+
+        getMode: function(){
+            return night; //true if night mode is on
         }
     }
 })();
@@ -93,17 +102,32 @@ var dataController = (function(){
 
 var UIController = (function() {
     var DOMstrings = {
+        root: ':root',
         inputDescription:"#input-box",
         container:".tasks",
         taskNumber: "#items-number",
         deleteCross:".delete-item",
         deleteCrossClass:"delete-item",
         box:'box-',//il faut ajouter le numéro
+        boxAll:'.box',
         clearcompleted:'#clear',
         tache: '.task',
         completed: '.crossed',
-        select:'#select'
+        select:'#select',
+        nightmode:'#mode',
+        light:'.img-light',//la lune s'affiche en mode jour
+        dark:'.img-dark',//le soleil s'affiche en mode nuit
+        boxDark:'box-dark',
+        footer:'#main-footer',
+        main:'.main',
+        mainDark:'main-dark',
+        attribution:'.attribution'
     };
+
+    var background = {
+        light: "url('images/bg-desktop-light.jpg')",
+        dark:"url('images/bg-desktop-dark.jpg')"
+    }
 
     var show = "all"; // 'all', 'active', 'completed' are the 3 values
 
@@ -166,10 +190,48 @@ var UIController = (function() {
 
         },
 
+        clear: function(){
+            document.querySelector(DOMstrings.inputDescription).value = "";
+        },
+
         deleteListItem(selectorId){
             el = document.getElementById('box-' + selectorId.toString());
             el.parentNode.removeChild(el);
         },
+
+        jour: function(){
+            // 1. Afficher la lune et cacher le soleil dans le header
+            document.querySelector(DOMstrings.light).style.display = 'inline';
+            document.querySelector(DOMstrings.dark).style.display = 'none';
+
+            // 2. Changer le background
+            document.querySelector(DOMstrings.root).style.backgroundImage = background.light;
+            document.querySelector(DOMstrings.root).style.backgroundColor = 'transparent';
+
+            // 3. Retirer la classe box-dark
+            var boxList = document.querySelectorAll('.' + DOMstrings.boxDark);
+            boxList.forEach(el => el.classList.remove(DOMstrings.boxDark));
+        },
+
+        nuit: function(){
+            // 1. Afficher le soleil et cacher la lune dans le header
+            document.querySelector(DOMstrings.light).style.display = 'none';
+            document.querySelector(DOMstrings.dark).style.display = 'inline';
+
+            // 2. Changer le background
+            document.querySelector(DOMstrings.root).style.backgroundImage = background.dark;
+            document.querySelector(DOMstrings.root).style.backgroundColor = 'hsl(235, 21%, 11%)';
+        
+            // 3. Ajouter la classe box-dark
+            var boxList = document.querySelectorAll(DOMstrings.boxAll);
+            boxList.forEach(el => el.classList.add(DOMstrings.boxDark));
+            document.querySelector(DOMstrings.inputDescription).classList.add(DOMstrings.boxDark);
+            document.querySelector(DOMstrings.footer).classList.add(DOMstrings.boxDark);
+            document.querySelector(DOMstrings.attribution).classList.add(DOMstrings.boxDark);
+
+            // 4. Ajouter la classe main-dark
+            document.querySelector(DOMstrings.main).classList.add(DOMstrings.mainDark);
+        }
 
     
 
@@ -201,11 +263,13 @@ var controller = (function(dataCtrl, UICtrl){
 
         //Event listener sur le clic sur un bouton select
         document.querySelector(DOM.select).addEventListener('click', CtrlDisplay);
+
+        //Event listener sur le clic sur la lune ou le soleil
+        document.querySelector(DOM.nightmode).addEventListener('click', CtrlMode);
     };
 
     var CtrlAddItem = function(){
-        var input, newItem;
-
+        var input, newItem, night;
 
         // 1. Get the field input data
         input = UICtrl.getInput(); /* Description sous forme string*/
@@ -214,14 +278,26 @@ var controller = (function(dataCtrl, UICtrl){
             return 0; //on stop si on a une chaine de caractère vide;
         };
 
+        // 1B. Get if mode is night or day
+        night = dataCtrl.getMode(); //true if night mode on, false if not.
+
         // 2. Ajouter la nouvelle Task à data et le récupérer
         newItem = dataCtrl.addTask(input);
         
         // 3. Ajouter newItem à l'UI
-        UICtrl.addListItem(newItem);
+        UICtrl.addListItem(newItem, night);
 
         // 4. Mettre à jour le nombre de tâches à effectuer
         UICtrl.updateNumber(dataCtrl.getTaskNumber());
+
+        // 5. Clear entry field
+        UICtrl.clear();
+
+        // 6. Update the UI (if mode is night or day)
+        if(night){
+            UICtrl.nuit();
+        }
+
         
     };
 
@@ -294,10 +370,23 @@ var controller = (function(dataCtrl, UICtrl){
         // 3. Mettre à jour l'UI avec la nouvelle valeur de show
         UICtrl.updateDisplayTasks(liste);
 
-        
-
     }
 
+    var CtrlMode = function(event){
+        DOM = UICtrl.getDOMstrings();
+        if(event.srcElement.classList[0] == DOM.light.split('.')[1]){
+            // mettre le mode nuit
+            console.log('mettre le mode nuit');
+            dataCtrl.updateMode(true);
+            UICtrl.nuit();
+
+        } else if(event.srcElement.classList[0] == DOM.dark.split('.')[1]){
+            //mettre le mode jour
+            console.log('mettre le mode jour');
+            dataCtrl.updateMode(false);
+            UICtrl.jour();
+        }
+    }
 
     return{
         test: function(){
