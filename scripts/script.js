@@ -239,6 +239,7 @@ var UIController = (function() {
             document.querySelector(DOMstrings.inputDescription).classList.add(DOMstrings.boxDark);
             document.querySelector(DOMstrings.footer).classList.add(DOMstrings.boxDark);
             document.querySelector(DOMstrings.attribution).classList.add(DOMstrings.boxDark);
+            document.querySelector('#select').classList.add(DOMstrings.boxDark);
 
             // 4. Ajouter la classe main-dark
             document.querySelector(DOMstrings.main).classList.add(DOMstrings.mainDark);
@@ -311,6 +312,21 @@ var controller = (function(dataCtrl, UICtrl){
             } else {
                 container.insertBefore(draggable, afterElement);
             }       
+        });
+
+        //responsive elements
+        window.addEventListener('resize', function(e){
+            console.log(window.innerWidth)
+            if(window.innerWidth < 600){
+                //passer en mode mobile
+                document.querySelector('.main').parentNode.insertBefore(document.getElementById('select'),document.querySelector(".comment"));
+                document.getElementById('select').classList.add('selectMobile');
+                
+
+            } else {
+                document.getElementById('select').classList.remove('selectMobile');
+                document.querySelector('.footer').insertBefore(document.getElementById('select'), document.querySelector('#clear'));
+            }
         })
         
     };
@@ -448,6 +464,7 @@ var controller = (function(dataCtrl, UICtrl){
     return{
         init: function(){
             setupEventListeners();
+            document.getElementById('all').classList.add('blueButton');//initialiser all en bleu.
         }
     }
 }(dataController, UIController));

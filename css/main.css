@@ -1,3 +1,4 @@
+
 :root{
     /* Neutral */
     --bright-blue: hsl(220, 98%, 61%);
@@ -20,10 +21,10 @@
     --Very-Dark-Grayish-Blue: hsl(237, 14%, 26%);
 
     /* Background */
-    background-color: transparent;
+    background-color: hsl(0, 5%, 96%);
     background-image:url('../images/bg-desktop-light.jpg');
     background-position:top;
-    background-size: 100%;
+    background-size: auto 320px;
     background-repeat: no-repeat;
 }
 body{
@@ -144,6 +145,24 @@ input:focus{
     text-decoration:line-through;
 }
 
+/* Mobile Version*/
+
+
+.selectMobile{
+    margin-top:20px;
+    display: flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    background: white;
+    height: 40px;
+}
+
+.mainMobile{
+    margin-left:10px;
+    margin-right: 10px;
+}
+
 /* Pour le mode nuit*/
 .box-dark{
     background: var(--Very-Dark-Grayish-Blue);
@@ -171,3 +190,9 @@ input:focus{
 .blueButton{
     color: var(--bright-blue);
 }
+
+
+
+
+
+
