@@ -57,6 +57,10 @@ header{
     border-bottom: 1px solid var(--Light-Grayish-Blue);
 }
 
+.task{
+    cursor:grab;
+}
+
 .box-dark{
     background: var(--Very-Dark-Grayish-Blue);
     color:var(--Very-Light-Gray);

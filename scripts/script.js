@@ -122,7 +122,8 @@ var UIController = (function() {
         footer:'#main-footer',
         main:'.main',
         mainDark:'main-dark',
-        attribution:'.attribution'
+        attribution:'.attribution',
+        dragging:'.dragging'
     };
 
     var background = {
@@ -140,7 +141,7 @@ var UIController = (function() {
         addListItem: function(item) {
             var html, newHtml;
 
-            html = '<div class="box task" id="box-%id%"><div class="checkbox-container round"><input type="checkbox" id="checkbox-%id%" /><label for="checkbox-%id%"></label></div><div class="item-description">%description%</div><div class="delete-item"><img src="images/icon-cross.svg"></div></div>';
+            html = '<div class="box task" id="box-%id%" draggable="true"><div class="checkbox-container round"><input type="checkbox" id="checkbox-%id%" /><label for="checkbox-%id%"></label></div><div class="item-description">%description%</div><div class="delete-item"><img src="images/icon-cross.svg"></div></div>';
             newHtml = html.replace('%description%', item.description);
             newHtml = newHtml.replace('%id%', item.id.toString());
             newHtml = newHtml.replace('%id%', item.id.toString());
@@ -241,6 +242,26 @@ var UIController = (function() {
 
             // 4. Ajouter la classe main-dark
             document.querySelector(DOMstrings.main).classList.add(DOMstrings.mainDark);
+        },
+
+        getDragAfterElement: function(y){
+            // 1. 
+            const draggableElements = [...document.querySelectorAll('.task:not(.dragging)')];//tous les éléments sauf celui qu'on tient dans le container
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();//on a box.{x,y, width, top, right...}
+                const offset = y - box.top - box.height / 2;
+                //on cherche l'offset qui est négatif mais le plus proche de 0
+                if(offset < 0 && offset > closest.offset){
+                    return {
+                        offset: offset, 
+                        element: child
+                    }
+                } else {
+                    return closest;
+                }
+            }, {offset: Number.NEGATIVE_INFINITY }).element;
+
+
         }
 
     
@@ -254,6 +275,8 @@ var UIController = (function() {
 var controller = (function(dataCtrl, UICtrl){
     var setupEventListeners = function(){
         var DOM = UICtrl.getDOMstrings();
+        const container = document.querySelector(DOM.container);
+        let draggable;
 
         //Event listener sur la touche entrée
         document.addEventListener('keypress', function(event){
@@ -276,9 +299,24 @@ var controller = (function(dataCtrl, UICtrl){
 
         //Event listener sur le clic sur la lune ou le soleil
         document.querySelector(DOM.nightmode).addEventListener('click', CtrlMode);
+
+        // Event listener pour le drag&drop
+        container.addEventListener('dragover', e => {
+            //Lorsque l'élément bouge au dessus du container
+            e.preventDefault();
+            const afterElement = UICtrl.getDragAfterElement(e.clientY);
+            draggable = document.querySelector(DOM.dragging);//l'élément qui est en train d'être bougé
+            if(afterElement == null){
+                container.appendChild(draggable);
+            } else {
+                container.insertBefore(draggable, afterElement);
+            }       
+        })
+        
     };
 
     var CtrlAddItem = function(){
+        var DOM = UICtrl.getDOMstrings();
         var input, newItem, night;
 
         // 1. Get the field input data
@@ -308,6 +346,17 @@ var controller = (function(dataCtrl, UICtrl){
             UICtrl.nuit();
         }
 
+        // 7. Add the event listener on the item for drag&droping
+        DOMelement = document.querySelector("#box-" + newItem.id);
+        DOMelement.addEventListener('dragstart', function(){
+            DOMelement = document.querySelector("#box-" + newItem.id);//màj pour l'event listener sinon ça prend pas le bon.
+            // Ajouter une classe dragging
+            DOMelement.classList.add('dragging');
+        });
+        DOMelement.addEventListener('dragend', function(){
+            // Retirer la classe dragging
+            document.querySelector("#box-" + newItem.id).classList.remove('dragging');          
+        });
         
     };
 
@@ -386,23 +435,21 @@ var controller = (function(dataCtrl, UICtrl){
         DOM = UICtrl.getDOMstrings();
         if(event.srcElement.classList[0] == DOM.light.split('.')[1]){
             // mettre le mode nuit
-            console.log('mettre le mode nuit');
             dataCtrl.updateMode(true);
             UICtrl.nuit();
 
         } else if(event.srcElement.classList[0] == DOM.dark.split('.')[1]){
             //mettre le mode jour
-            console.log('mettre le mode jour');
             dataCtrl.updateMode(false);
             UICtrl.jour();
         }
     }
 
     return{
-        test: function(){
+        init: function(){
             setupEventListeners();
         }
     }
 }(dataController, UIController));
 
-controller.test();
+controller.init();

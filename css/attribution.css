@@ -2,12 +2,13 @@
 .attribution a { color: hsl(228, 45%, 44%); }
 
 .attribution{
-    position:sticky;
+    position:fixed;
     left:calc(50% - 165px); /*175px is half the attribution div*/
     bottom:10px;
     text-align: center;
     padding:10px;
     background-color: whitesmoke;
+    border: 2px solid black;
 }
 
 .box-dark.attribution > * > a{
