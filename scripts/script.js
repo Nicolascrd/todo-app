@@ -263,6 +263,15 @@ var UIController = (function() {
             }, {offset: Number.NEGATIVE_INFINITY }).element;
 
 
+        },
+
+        toMobile: function(){
+            document.querySelector('.main').parentNode.insertBefore(document.getElementById('select'),document.querySelector(".comment"));
+            document.getElementById('select').classList.add('selectMobile');
+        },
+        toDesktop: function(){
+            document.getElementById('select').classList.remove('selectMobile');
+            document.querySelector('.footer').insertBefore(document.getElementById('select'), document.querySelector('#clear'));
         }
 
     
@@ -315,21 +324,18 @@ var controller = (function(dataCtrl, UICtrl){
         });
 
         //responsive elements
-        window.addEventListener('resize', function(e){
-            console.log(window.innerWidth)
-            if(window.innerWidth < 600){
-                //passer en mode mobile
-                document.querySelector('.main').parentNode.insertBefore(document.getElementById('select'),document.querySelector(".comment"));
-                document.getElementById('select').classList.add('selectMobile');
-                
-
-            } else {
-                document.getElementById('select').classList.remove('selectMobile');
-                document.querySelector('.footer').insertBefore(document.getElementById('select'), document.querySelector('#clear'));
-            }
-        })
-        
+        window.addEventListener('resize', responsiveManager);   
     };
+
+    var responsiveManager = function(){
+        if(window.innerWidth < 600){
+            //passer en mode mobile
+            UICtrl.toMobile();
+        } else {
+            //passer en mode desktop
+            UICtrl.toDesktop();
+        }
+    }
 
     var CtrlAddItem = function(){
         var DOM = UICtrl.getDOMstrings();
@@ -465,6 +471,7 @@ var controller = (function(dataCtrl, UICtrl){
         init: function(){
             setupEventListeners();
             document.getElementById('all').classList.add('blueButton');//initialiser all en bleu.
+            responsiveManager();//initialiser le responsive en mobile si besoin
         }
     }
 }(dataController, UIController));

@@ -163,6 +163,24 @@ input:focus{
     margin-right: 10px;
 }
 
+@media(max-width:600px){
+    body{
+        margin-right:20px;
+        margin-left:20px;
+    }
+    .footer{
+        justify-content: space-between;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+@media(min-width: 1540px){
+    :root{
+        background-size:100%;
+    }
+}
+
 /* Pour le mode nuit*/
 .box-dark{
     background: var(--Very-Dark-Grayish-Blue);
